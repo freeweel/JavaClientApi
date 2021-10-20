@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import config.Config;
+import marklogic.MarkLogicDataMovement;
 
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -9,10 +10,12 @@ import com.marklogic.client.datamovement.WriteBatcher;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
+import aws.AmazonS3Util;
+
 /**
- * Load S3 Data into MarkLogic
+ * Example Main Module that shows how to load S3 Data into MarkLogic
  */
-public final class Main {
+public final class LoadS3ToMarkLogic {
 	private static File configFile = new File("src/main/resources/AccessKeys.secret");
 
 	/**
@@ -21,7 +24,7 @@ public final class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		// Load all S3 files with this bucket and object prefix (e.g., directory path)
+		// Load all S3 files with this bucket and object prefix (e.g., can work like a directory path)
 		String bucketName = "marklogic-glue-bucket";
 		String s3ObjectPrefix = "Paul/";
 

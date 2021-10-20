@@ -1,4 +1,4 @@
-package main;
+package marklogic;
 
 import java.io.InputStream;
 import java.time.Instant;
@@ -21,12 +21,9 @@ public class MarkLogicDataMovement {
 	/**
 	 * Constructor
 	 * 
-	 * @param hostname The name or IP address of the host
-	 * @param port     The database service port
-	 * @param user     The user name
-	 * @param pwd      The user's password
+	 * @param config An initialized Config object
 	 */
-	public MarkLogicDataMovement(Config config) throws Exception {
+	public MarkLogicDataMovement(Config config) {
 		// Set up a new Client
 		DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.getMLUser(), config.getMLPassword());
 		DatabaseClient dbClient = DatabaseClientFactory.newClient(config.getMLHost(), config.getMLStagingDbPort(), authContext);
@@ -36,7 +33,7 @@ public class MarkLogicDataMovement {
 	/**
 	 * Create a WriteBatcher and start a job using it
 	 * 
-	 * @param jobName
+	 * @param jobName A unique job name
 	 * @return the WriteBatcher object
 	 */
 	public WriteBatcher startJob(String jobName) {
