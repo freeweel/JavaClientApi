@@ -21,10 +21,11 @@ public final class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		// Load all S3 files with this prefix (directory path)
+		// Load all S3 files with this bucket and object prefix (e.g., directory path)
+		String bucketName = "marklogic-glue-bucket";
 		String s3ObjectPrefix = "Paul/";
 
-		// Get config from config file
+		// Create config object from config file
 		Config config = Config.setFile(configFile);
 
 		// Get MarkLogic credentials 
@@ -32,7 +33,6 @@ public final class Main {
 		WriteBatcher writeBatcher = writer.startJob("S3-Write");
 
 		// Get list of documents from named S3 bucket within the specified directory
-		String bucketName = "marklogic-glue-bucket";
 		AmazonS3Util s3Util = new AmazonS3Util(config);
 		ListObjectsV2Result s3Results = s3Util.getDocList(bucketName, s3ObjectPrefix);
 		for (S3ObjectSummary summary : s3Results.getObjectSummaries()) {
