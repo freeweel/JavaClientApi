@@ -13,6 +13,7 @@ import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
+import org.apache.commons.io.IOUtils;
 
 public class AmazonS3Util {
 	private AmazonS3 s3;
@@ -56,7 +57,6 @@ public class AmazonS3Util {
 	public void readDocToStream(OutputStream out, String bucketName, String s3FileKey) throws Exception {
 		GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, s3FileKey);
 		S3Object s3Object = s3.getObject(getObjectRequest);
-		s3Object.getObjectContent().transferTo(out);
+		IOUtils.copy(s3Object.getObjectContent(), out);
 	}
-
 }

@@ -23,3 +23,8 @@
 hs_err_pid*
 
 *.secret
+*.bin
+.gradle/
+.idea/
+.vscode/
+build/
