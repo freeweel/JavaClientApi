@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="JavaClientApi">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/build/libs/JavaClientApi.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
