@@ -1,47 +1,54 @@
 package config;
 
+import java.io.File;
+
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+
+/**
+ * Configuration object for AWS and MarkLogic credentials
+ */
 public class Config {
-	public enum ENV {local, dev};
-	private int item;
-	
-	private String[] server = {"localhost","wps-mlogic-t01"};
-	private int[] portStaging = {8010,8020};
-	private int[] portFinal = {8011,8021};
-	private String[] user = {"admin","0024900"};
-	private String[] pwd = {"admin","Kia20.optima!AT"};
-	
-	
-	public Config(ENV env) {
-		this.item = getEnv(env);
-	}
-	
-	public static Config getConfig(ENV env) {
-		return new Config(env);
-	}
-	
-	private static int getEnv(ENV env) {
-		if (env == ENV.local) return 0;
-		else if (env == ENV.dev) return 1; 
-		return 0;
-	}
-	
-	public String server() {
-		return this.server[item];
-	}
-	
-	public int portStaging() {
-		return this.portStaging[item];
+	private DocumentContext json;
+	private File configFile;
+
+	// Private constructor
+	private Config(File configFile) throws Exception {
+		this.configFile = configFile;
+		this.json = JsonPath.parse(configFile);
 	}
 
-	public int portFinal() {
-		return this.portFinal[item];
+	/**
+	 * Constructor
+	 * @param configFile A JSON config file
+	 * @return A Config object
+	 * @throws Exception
+	 */
+	public static Config setFile(File configFile) throws Exception {
+		// Look for hidden file
+		if (!configFile.exists()) {
+			throw new Exception("Access keys expected in file " + configFile.getCanonicalPath());
+		}
+		return new Config(configFile);
 	}
 
-	public String user() {
-		return this.user[item];
+	// Internal method to read JSON (allows for additional error checking in the future)
+	private Object get(String key) { 
+		return this.json.read(key); 
 	}
-	
-	public String pwd() {
-		return this.pwd[item];
-	}
+
+	// Get the config file
+	public File getConfigFile() { return this.configFile; }
+
+	// Get config properties for AWS
+	public String getAwsKey() { return (String)get("aws_key"); }
+	public String getAwsSecret() { return (String) get("aws_secret"); }
+	public String getAwsRegion() { return (String) get("aws_region"); }
+
+	// Get config properties for MarkLogic
+	public String getMLHost() { return (String) get("ml_host"); }
+	public String getMLUser() { return (String) get("ml_user"); }
+	public String getMLPassword() { return (String) get("ml_password"); }
+	public int getMLStagingDbPort() { return (Integer) get("ml_staging_db_port"); }
+	public int getMLFinalDbPort() { return (Integer) get("ml_final_db_port"); }
 }

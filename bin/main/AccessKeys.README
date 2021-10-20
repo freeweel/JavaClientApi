@@ -1,0 +1,25 @@
+To access your Amazon S3 bucket you must have an Access Key and an Access Secret Key
+entered and stored in the following file:
+
+src/main/resources/AccessKeys.secret
+
+The AccessKeys.secret file should be valid JSON in the following format:
+
+{
+	"aws_key":"ACCESS_KEY",
+    "aws_secret":"SECRET_KEY",
+    "aws_region":"us-east-1, us-east-2, etc."
+    "ml_user":"username",
+    "ml_password":"password",
+    "ml_staging_db_port": 8010,
+    "ml_final_db_port": 8011
+}
+
+
+IMPORTANT! DO NOT CHECK IN THE AccessKeys.secret file!!!!
+NOTE: The current .gitignore will ignore *.secret files!!!
+
+The Access key's IAM User must have at least AmazonS3ReadOnlyAccess
+
+
+

@@ -1,22 +1,21 @@
 package main;
 
+import java.io.File;
 import java.io.Reader;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.IOUtils;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
 
+import org.apache.commons.io.IOUtils;
+
 import config.Config;
-import config.Config.ENV;
 import dataservices.Test;
 
 /**
- * 
+ * Used to test MarkLogic's Data Services feature
  */
 public final class DataServiceTest {
-	private static Config config = Config.getConfig(ENV.local);
 	// private static Config config = Config.getConfig(ENV.dev);
 	private static Logger logger = Logger.getLogger("test");
 
@@ -24,11 +23,13 @@ public final class DataServiceTest {
 	/**
 	 * Main method to get a MarkLogic connection and call the Test data service
 	 */
-	public static void main(String[] args) {
-		String host = config.server();
-		int FINAL_PORT = config.portFinal();
-		String userName = config.user();
-		String password = config.pwd();
+	public static void main(String[] args) throws Exception {
+		Config config = Config.setFile(new File("src/main/resources/AccessKeys.secret"));
+
+		String host = config.getMLHost();
+		int FINAL_PORT = config.getMLFinalDbPort();
+		String userName = config.getMLUser();
+		String password = config.getMLPassword();
 
 		try {
 			final DatabaseClient dbClient = DatabaseClientFactory.newClient(host, FINAL_PORT,
