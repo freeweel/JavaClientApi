@@ -11,11 +11,22 @@ import com.jayway.jsonpath.JsonPath;
 public class Config {
 	private DocumentContext json;
 	private File configFile;
+	public final String AWS_KEY, AWS_SECRET, AWS_REGION, ML_USER, ML_PASSWORD, ML_HOST;
+	public final int ML_STAGING_PORT, ML_FINAL_PORT;
 
 	// Private constructor
 	private Config(File configFile) throws Exception {
 		this.configFile = configFile;
 		this.json = JsonPath.parse(configFile);
+
+		AWS_KEY = (String)this.get("aws_key");
+		AWS_SECRET= (String)this.get("aws_secret");
+		AWS_REGION = (String)this.get("aws_region");
+		ML_USER = (String)this.get("ml_user");
+		ML_PASSWORD = (String)this.get("ml_password");
+		ML_HOST = (String)this.get("ml_host");
+		ML_STAGING_PORT = (Integer)this.get("ml_staging_db_port");
+		ML_FINAL_PORT = (Integer)this.get("ml_final_db_port");
 	}
 
 	/**
@@ -34,21 +45,9 @@ public class Config {
 
 	// Internal method to read JSON (allows for additional error checking in the future)
 	private Object get(String key) { 
-		return this.json.read(key); 
+		return this.json.read(key);
 	}
 
 	// Get the config file
 	public File getConfigFile() { return this.configFile; }
-
-	// Get config properties for AWS
-	public String getAwsKey() { return (String)get("aws_key"); }
-	public String getAwsSecret() { return (String) get("aws_secret"); }
-	public String getAwsRegion() { return (String) get("aws_region"); }
-
-	// Get config properties for MarkLogic
-	public String getMLHost() { return (String) get("ml_host"); }
-	public String getMLUser() { return (String) get("ml_user"); }
-	public String getMLPassword() { return (String) get("ml_password"); }
-	public int getMLStagingDbPort() { return (Integer) get("ml_staging_db_port"); }
-	public int getMLFinalDbPort() { return (Integer) get("ml_final_db_port"); }
 }

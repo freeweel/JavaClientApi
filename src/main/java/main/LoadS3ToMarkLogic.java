@@ -16,7 +16,7 @@ import aws.AmazonS3Util;
  * Example Main Module that shows how to load S3 Data into MarkLogic
  */
 public final class LoadS3ToMarkLogic {
-	private static File configFile = new File("src/main/resources/AccessKeys.secret");
+	final private static File configFile = new File("src/main/resources/AccessKeys.secret");
 
 	/**
 	 * Load S3 Data into MarkLogic

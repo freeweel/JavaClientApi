@@ -23,9 +23,9 @@ public class AmazonS3Util {
 	 */
     public AmazonS3Util(Config config) throws Exception {
 		// Get AWS Credentials using values found in AccessKeys.secret
-		String accessKey = config.getAwsKey();
-		String secretKey = config.getAwsSecret();
-		String region = config.getAwsRegion();
+		String accessKey = config.AWS_KEY;
+		String secretKey = config.AWS_SECRET;
+		String region = config.AWS_REGION;
 		BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
 		this.s3 = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(awsCreds)).withRegion(region).build();
 	}
@@ -50,8 +50,9 @@ public class AmazonS3Util {
 
 	/**
 	 * Populate an OutputStream with an S3 Document's content
-	 * @param bucketName
-	 * @param s3FileKey
+	 * @param out An OutputStream such as a ByteArrayOutputStream or FileOutputStream
+	 * @param bucketName The name of the bucket containing the file
+	 * @param s3FileKey The S3 object's full path
 	 * @throws Exception
 	 */
 	public void readDocToStream(OutputStream out, String bucketName, String s3FileKey) throws Exception {

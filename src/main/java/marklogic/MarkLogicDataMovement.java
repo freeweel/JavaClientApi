@@ -19,19 +19,20 @@ public class MarkLogicDataMovement {
 	private DataMovementManager manager;
 
 	/**
-	 * Constructor
+	 * Constructor that sets the configuration and
+	 * creates a new data movement manager
 	 * 
 	 * @param config An initialized Config object
 	 */
 	public MarkLogicDataMovement(Config config) {
 		// Set up a new Client
-		DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.getMLUser(), config.getMLPassword());
-		DatabaseClient dbClient = DatabaseClientFactory.newClient(config.getMLHost(), config.getMLStagingDbPort(), authContext);
+		DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.ML_USER, config.ML_PASSWORD);
+		DatabaseClient dbClient = DatabaseClientFactory.newClient(config.ML_HOST, config.ML_STAGING_PORT, authContext);
 		this.manager = dbClient.newDataMovementManager();
 	}
 
 	/**
-	 * Create a WriteBatcher and start a job using it
+	 * Create a WriteBatcher and start a data movement job using it
 	 * 
 	 * @param jobName A unique job name
 	 * @return the WriteBatcher object
@@ -54,6 +55,8 @@ public class MarkLogicDataMovement {
 
 	/**
 	 * Add a Data Hub Document
+	 * This include adding the metadata used by data hub, and it
+	 * adds the new document to an "Ingestion" collection.
 	 * 
 	 * @param writer     An initialized WriteBatcher
 	 * @param uri        The document's URI in MarkLogic
@@ -75,6 +78,7 @@ public class MarkLogicDataMovement {
 
 	/**
 	 * Complete the job
+	 * Flushes any unwritten saves from the cache and closes the job
 	 * 
 	 * @param writer An active WriteBatcher
 	 */
