@@ -10,6 +10,8 @@ import com.marklogic.client.datamovement.DataMovementManager;
 import com.marklogic.client.datamovement.WriteBatcher;
 import com.marklogic.client.io.DocumentMetadataHandle;
 import config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides a layer around the Data Movement SDK's
@@ -17,6 +19,7 @@ import config.Config;
  */
 public class MarkLogicDataMovement {
 	private DataMovementManager manager;
+	private static Logger LOGGER = LoggerFactory.getLogger("Log");
 
 	/**
 	 * Constructor that sets the configuration and
@@ -44,7 +47,7 @@ public class MarkLogicDataMovement {
 		writer.withJobName(jobName);
 		writer.withBatchSize(50);
 		writer.onBatchSuccess(batch -> {
-			System.out.append("Batch success");
+			LOGGER.info("Batch run successful");
 		});
 		writer.onBatchFailure((batch, throwable) -> throwable.printStackTrace());
 
