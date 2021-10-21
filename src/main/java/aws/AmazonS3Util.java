@@ -23,11 +23,10 @@ public class AmazonS3Util {
 	 */
     public AmazonS3Util(Config config) throws Exception {
 		// Get AWS Credentials using values found in AccessKeys.secret
-		String accessKey = config.AWS_KEY;
-		String secretKey = config.AWS_SECRET;
-		String region = config.AWS_REGION;
-		BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
-		this.s3 = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(awsCreds)).withRegion(region).build();
+		BasicAWSCredentials awsCreds = new BasicAWSCredentials(config.AWS_KEY, config.AWS_SECRET);
+		this.s3 = AmazonS3ClientBuilder.standard()
+				.withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+				.withRegion(config.AWS_REGION).build();
 	}
 
 	/**

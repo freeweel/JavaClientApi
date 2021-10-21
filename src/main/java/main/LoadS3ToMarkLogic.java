@@ -27,12 +27,12 @@ public final class LoadS3ToMarkLogic {
 	 */
 	public static void main(String[] args) throws Exception {
 		try {
-			// Load all S3 files with this bucket and object prefix (e.g., can work like a directory path)
-			String bucketName = "marklogic-glue-bucket";
-			String s3ObjectPrefix = "Paul/";
-
 			// Create config object from config file
 			Config config = Config.setFile(configFile);
+
+			// Load all S3 files with this bucket and object prefix (e.g., can work like a directory path)
+			String bucketName = config.AWS_BUCKET;
+			String s3ObjectPrefix = config.AWS_PREFIX;
 
 			// Get MarkLogic credentials
 			MarkLogicDataMovement writer = new MarkLogicDataMovement(config);

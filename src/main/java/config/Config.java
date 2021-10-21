@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	private final DocumentContext json;
 	private final File configFile;
-	public final String AWS_KEY, AWS_SECRET, AWS_REGION, ML_USER, ML_PASSWORD, ML_HOST;
+	public final String AWS_KEY, AWS_SECRET, AWS_REGION, AWS_BUCKET, AWS_PREFIX;
+	public final String ML_USER, ML_PASSWORD, ML_HOST;
 	public final int ML_STAGING_PORT, ML_FINAL_PORT;
 	private static final Logger LOGGER = LoggerFactory.getLogger("Log");
 
@@ -26,6 +27,8 @@ public class Config {
 			AWS_KEY = (String) this.get("aws_key");
 			AWS_SECRET = (String) this.get("aws_secret");
 			AWS_REGION = (String) this.get("aws_region");
+			AWS_BUCKET = (String) this.get("aws_bucket");
+			AWS_PREFIX = (String) this.get("aws_prefix");
 			ML_USER = (String) this.get("ml_user");
 			ML_PASSWORD = (String) this.get("ml_password");
 			ML_HOST = (String) this.get("ml_host");

@@ -9,7 +9,9 @@ The AccessKeys.secret file should be valid JSON in the following format:
 {
 	"aws_key":"IAM_USER_ACCESS_KEY",
     "aws_secret":"IAM_USER_SECRET_KEY",
-    "aws_region":"us-east-1, us-east-2, etc."
+    "aws_region":"us-east-1, us-east-2, etc.",
+    "aws_bucket":"AWS Bucket Name where files reside",
+    "aws_prefix":"Get S3 objects with this prefix (can be a 'directory' path string like 'quantum/test/')"
     "ml_host":"load balancer or instance host name (e.g., marklogic-elasticl-kzv7l5gikgfl-15027760.us-east-2.elb.amazonaws.com)",
     "ml_user":"username",
     "ml_password":"password",
