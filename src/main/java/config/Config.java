@@ -21,9 +21,9 @@ public class Config {
 	// Private constructor
 	private Config(File configFile) throws Exception {
 		this.configFile = configFile;
-		this.json = JsonPath.parse(configFile);
 
 		try {
+			this.json = JsonPath.parse(configFile);
 			AWS_KEY = (String) this.get("aws_key");
 			AWS_SECRET = (String) this.get("aws_secret");
 			AWS_REGION = (String) this.get("aws_region");
@@ -36,7 +36,7 @@ public class Config {
 			ML_FINAL_PORT = (Integer) this.get("ml_final_db_port");
 		}
 		catch(Exception e) {
-			LOGGER.error("Unable to read configuration file.");
+			LOGGER.error("Unable to read configuration file in class " + Config.class.getCanonicalName());
 			throw(e);
 		}
 	}
@@ -58,8 +58,8 @@ public class Config {
 	// Internal method to read JSON (allows for additional error checking)
 	private Object get(String key) throws Exception {
 		try {
-			String param = this.json.read(key);
-			if (param == null || param.isEmpty()) throw new Exception(key);
+			Object param = this.json.read(key);
+			if (param == null || param.toString().isEmpty()) throw new Exception(key);
 			return param;
 		}
 		catch(Exception e) {
