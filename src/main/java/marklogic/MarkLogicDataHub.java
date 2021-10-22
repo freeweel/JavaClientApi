@@ -64,7 +64,7 @@ public class MarkLogicDataHub {
         flowRunner.awaitCompletion();
 
         // Display the response.
-        System.out.println("Response: " + response);
+        LOGGER.info("Response: " + response);
     }
 }
 
