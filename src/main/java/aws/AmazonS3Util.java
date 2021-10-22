@@ -1,10 +1,5 @@
 package aws;
 
-import config.Config;
-
-import java.io.OutputStream;
-import java.util.List;
-
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -13,7 +8,11 @@ import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
+import config.Config;
 import org.apache.commons.io.IOUtils;
+
+import java.io.OutputStream;
+import java.util.List;
 
 public class AmazonS3Util {
 	private AmazonS3 s3;
@@ -21,7 +20,8 @@ public class AmazonS3Util {
 	/**
 	 * Constructor (initializes session with credentials)
 	 */
-    public AmazonS3Util(Config config) throws Exception {
+    public AmazonS3Util() throws Exception {
+		Config config = Config.getConfig();
 		// Get AWS Credentials using values found in AccessKeys.secret
 		BasicAWSCredentials awsCreds = new BasicAWSCredentials(config.AWS_KEY, config.AWS_SECRET);
 		this.s3 = AmazonS3ClientBuilder.standard()

@@ -16,7 +16,8 @@ The AccessKeys.secret file should be valid JSON in the following format:
     "ml_user":"username",
     "ml_password":"password",
     "ml_staging_db_port": 8010,
-    "ml_final_db_port": 8011
+    "ml_final_db_port": 8011,
+    "ml_jobs_db_port": 8013
 }
 
 

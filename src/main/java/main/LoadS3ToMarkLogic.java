@@ -1,45 +1,40 @@
 package main;
 
-import java.io.File;
-import config.Config;
-import marklogic.MarkLogicDataMovement;
-
+import aws.AmazonS3Util;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.marklogic.client.datamovement.WriteBatcher;
-
+import config.Config;
+import marklogic.MarkLogicDataMovement;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import aws.AmazonS3Util;
 
 /**
  * Example Main Module that shows how to load S3 Data into MarkLogic
  */
 public final class LoadS3ToMarkLogic {
-	final private static File configFile = new File("src/main/resources/AccessKeys.secret");
-	private static Logger LOGGER = LoggerFactory.getLogger("Log");
-	/**
-	 * Load S3 Data into MarkLogic
-	 * @param args  
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
+		private static Logger LOGGER = LoggerFactory.getLogger("Log");
+		/**
+		 * Load S3 Data into MarkLogic
+		 * @param args
+		 * @throws Exception
+		 */
+		public static void main(String[] args) throws Exception {
 		try {
 			// Create config object from config file
-			Config config = Config.setFile(configFile);
+			Config config = Config.getConfig();
 
 			// Load all S3 files with this bucket and object prefix (e.g., can work like a directory path)
 			String bucketName = config.AWS_BUCKET;
 			String s3ObjectPrefix = config.AWS_PREFIX;
 
-			// Get MarkLogic credentials
-			MarkLogicDataMovement writer = new MarkLogicDataMovement(config);
+			// Create MarkLogic data movement instance and start the load job
+			MarkLogicDataMovement writer = new MarkLogicDataMovement();
 			WriteBatcher writeBatcher = writer.startJob("S3-Write");
 
 			// Get list of documents from named S3 bucket within the specified directory
-			AmazonS3Util s3Util = new AmazonS3Util(config);
+			AmazonS3Util s3Util = new AmazonS3Util();
 			ListObjectsV2Result s3Results = s3Util.getDocList(bucketName, s3ObjectPrefix);
 			for (S3ObjectSummary summary : s3Results.getObjectSummaries()) {
 				String s3FileKey = summary.getKey();

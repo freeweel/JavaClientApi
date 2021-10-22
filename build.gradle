@@ -45,14 +45,20 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     
-    // MarkLogic Java Client API
-    compile group: 'com.marklogic', name: 'marklogic-client-api', version: '5.5.1'
-    
+    // MarkLogic Java Client API (5.4.0 required for compatibility with Data Hub 5.5.1)
+    compile group: 'com.marklogic', name: 'marklogic-client-api', version: '5.4.0'
+
+    // MarkLogic Data Hub API
+    compile group: 'com.marklogic', name: 'marklogic-data-hub', version: '5.5.1'
+
     // Needed for SLF4
     compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
     compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
     compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
-    
+
+    // This prevented a warning message
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0+"
+
     // Apache commons IO
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile 'commons-io:commons-io:2.8.0'

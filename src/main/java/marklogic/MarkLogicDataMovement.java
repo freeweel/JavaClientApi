@@ -1,8 +1,5 @@
 package marklogic;
 
-import java.io.InputStream;
-import java.time.Instant;
-
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
 import com.marklogic.client.DatabaseClientFactory.DigestAuthContext;
@@ -12,6 +9,9 @@ import com.marklogic.client.io.DocumentMetadataHandle;
 import config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.InputStream;
+import java.time.Instant;
 
 /**
  * This class provides a layer around the Data Movement SDK's
@@ -24,10 +24,9 @@ public class MarkLogicDataMovement {
 	/**
 	 * Constructor that sets the configuration and
 	 * creates a new data movement manager
-	 * 
-	 * @param config An initialized Config object
 	 */
-	public MarkLogicDataMovement(Config config) {
+	public MarkLogicDataMovement() throws Exception {
+		Config config = Config.getConfig();
 		// Set up a new Client
 		DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.ML_USER, config.ML_PASSWORD);
 		DatabaseClient dbClient = DatabaseClientFactory.newClient(config.ML_HOST, config.ML_STAGING_PORT, authContext);
@@ -68,7 +67,7 @@ public class MarkLogicDataMovement {
 	public void addDocument(WriteBatcher writer, String uri, InputStream datastream) {
 		// Set expected metadata for Data Hub document
 		DocumentMetadataHandle dmdh = new DocumentMetadataHandle();
-		dmdh.withMetadataValue("datahubCreatedBy", "S3-Input");
+		dmdh.withMetadataValue("datahubCreatedBy", "S3-Ingest");
 		dmdh.withMetadataValue("datahubCreatedByStep", "");
 		dmdh.withMetadataValue("datahubCreatedInFlow", "");
 		dmdh.withMetadataValue("datahubCreatedOn", Instant.now().toString());

@@ -26,7 +26,10 @@ hs_err_pid*
 *.secret
 
 # Gradle working files, IDE specific files, and build files
+gradle/
 .gradle/
 .idea/
 .vscode/
+.settings/
 build/
+bin/
