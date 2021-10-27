@@ -4,8 +4,8 @@
 This project is a fully functional Java application that performs the following:
 1. Extracts data from AWS S3 using AWS libraries
 2. Streams S3 data into MarkLogic Data Hub using MarkLogic Java Client API and Data Movement SDK (DMSDK)
-3. Also allows launching a data hub flow after data is loaded
-4. Stream data out of MarkLogic into S3
+3. Shows how to launch a data hub flow
+4. Extracts data from MarkLogic Data Hub and streams it back to S3
 
 ** NOTE: This project uses Java JDK 1.8 and Gradle 6.x **
 
@@ -14,7 +14,7 @@ To run the examples:
 2. Ensure you have gradle and JDK set up
 4. Build code using gradle
 5. You will need a working MarkLogic instance as well as files in an S3 bucket on AWS
-6. Open and read the src/main/resources/AccessKeys.README
+6. Open and read the [src/main/resources/AccessKeys.README](src/main/resources/AccessKeys.README)
 7. Create AccessKeys.secret file in the same directory using your AWS and MarkLogic credentials and environment settings
 8. Run the following main program for loading data from S3 to MarkLogic
       - src/main/java/main/LoadS3ToMarkLogic.java
