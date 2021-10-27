@@ -32,8 +32,8 @@ public final class LoadS3ToMarkLogic {
             String bucketName = config.AWS_BUCKET;
 
             // Create MarkLogic data movement instance and start the load job
-            MarkLogicDataMovement writer = new MarkLogicDataMovement();
-            WriteBatcher writeBatcher = writer.startWriteJob("S3-Write");
+            MarkLogicDataMovement dmsdk = new MarkLogicDataMovement();
+            WriteBatcher writeBatcher = dmsdk.startWriteJob("S3-Write");
 
             // Get list of documents from named S3 bucket within the specified directory
             AmazonS3Util s3Util = new AmazonS3Util();
@@ -49,7 +49,7 @@ public final class LoadS3ToMarkLogic {
                     try {
                         s3Util.readDocToStream(output, s3FileKey);
                         String uri = String.format("/Ingest/%s", s3FileKey);
-                        writer.addDocument(writeBatcher, uri, output.toInputStream());
+                        dmsdk.addDocument(writeBatcher, uri, output.toInputStream());
                         total++;
                     } finally {
                         output.close();
@@ -58,7 +58,7 @@ public final class LoadS3ToMarkLogic {
             }
 
             // Flush jobs and close write batch
-            writer.closeWriteJob(writeBatcher);
+            dmsdk.closeWriteJob(writeBatcher);
         } catch (Exception e) {
             LOGGER.error("Error occurred while processing upload " + e.getMessage());
         } finally {

@@ -21,7 +21,7 @@ import java.time.Instant;
  * DataMovementManager and WriteBatcher
  */
 public class MarkLogicDataMovement {
-    private DataMovementManager manager;
+    private DataMovementManager dmManager;
     private DatabaseClient dbClient;
     private static Logger LOGGER = LoggerFactory.getLogger("Log");
 
@@ -34,7 +34,7 @@ public class MarkLogicDataMovement {
         // Set up a new Client
         DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.ML_USER, config.ML_PASSWORD);
         this.dbClient = DatabaseClientFactory.newClient(config.ML_HOST, config.ML_STAGING_PORT, authContext);
-        this.manager = dbClient.newDataMovementManager();
+        this.dmManager = dbClient.newDataMovementManager();
     }
 
     /**
@@ -46,12 +46,12 @@ public class MarkLogicDataMovement {
      */
     public void extractFromMarkLogic(StreamWriter outputStreamWriter, String... collection) throws Exception {
         // Construct a Collection query with which to drive the job.
-        QueryManager qm = this.dbClient.newQueryManager();
-        StringQueryDefinition queryDef = qm.newStringDefinition();
+        QueryManager queryManager = this.dbClient.newQueryManager();
+        StringQueryDefinition queryDef = queryManager.newStringDefinition();
         queryDef.setCollections(collection);
 
         // Set up the batcher
-        QueryBatcher batcher = manager.newQueryBatcher(queryDef);
+        QueryBatcher batcher = dmManager.newQueryBatcher(queryDef);
         batcher.onUrisReady(
                 new ExportListener()
                         .withConsistentSnapshot()
@@ -64,7 +64,7 @@ public class MarkLogicDataMovement {
                                 inputStream = inputStreamHandle.get();
 
                                 // Build output stream based on type of StreamWriter class used
-                                // Could by S3, File, MarkLogic, etc
+                                // Could be S3, File, MarkLogic, etc
                                 outputStreamWriter.write("/temp/out" + doc.getUri(), inputStream);
 
                                 LOGGER.info("Writing " + doc.getUri());
@@ -77,9 +77,9 @@ public class MarkLogicDataMovement {
                 .onQueryFailure(exception -> LOGGER.error("Error running batch!! " + exception.getStackTrace().toString()));
 
         // Run the Job
-        JobTicket ticket = this.manager.startJob(batcher);
+        JobTicket ticket = this.dmManager.startJob(batcher);
         batcher.awaitCompletion();
-        this.manager.stopJob(ticket);
+        this.dmManager.stopJob(ticket);
     }
 
     /**
@@ -89,7 +89,7 @@ public class MarkLogicDataMovement {
      * @return the WriteBatcher object
      */
     public WriteBatcher startWriteJob(String jobName) {
-        final WriteBatcher writer = manager.newWriteBatcher();
+        final WriteBatcher writer = dmManager.newWriteBatcher();
 
         // Set up the job properties
         writer.withJobName(jobName);
@@ -100,7 +100,7 @@ public class MarkLogicDataMovement {
         writer.onBatchFailure((batch, throwable) -> throwable.printStackTrace());
 
         // Start the job (also assigns a ticket)
-        manager.startJob(writer);
+        dmManager.startJob(writer);
         return writer;
     }
 
@@ -134,6 +134,6 @@ public class MarkLogicDataMovement {
      */
     public void closeWriteJob(WriteBatcher writer) {
         writer.flushAndWait();
-        manager.stopJob(writer.getJobTicket());
+        dmManager.stopJob(writer.getJobTicket());
     }
 }

@@ -20,10 +20,10 @@ public class ExtractDataFromMarkLogic {
      */
     public static void main(String[] args) throws Exception {
         String[] collection = {"Person-Ingest"};
-        MarkLogicDataMovement dm = new MarkLogicDataMovement();
+        MarkLogicDataMovement dmsdk = new MarkLogicDataMovement();
         // Write to S3
-        dm.extractFromMarkLogic(new S3StreamWriter(), collection);
+        dmsdk.extractFromMarkLogic(new S3StreamWriter(), collection);
         // Write to File System
-        dm.extractFromMarkLogic(new FileStreamWriter(), collection);
+        dmsdk.extractFromMarkLogic(new FileStreamWriter(), collection);
     }
 }
