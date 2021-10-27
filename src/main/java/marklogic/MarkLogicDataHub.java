@@ -7,7 +7,7 @@ import com.marklogic.hub.flow.RunFlowResponse;
 import com.marklogic.hub.flow.impl.FlowRunnerImpl;
 import com.marklogic.hub.impl.HubConfigImpl;
 import com.marklogic.mgmt.util.SimplePropertySource;
-import config.Config;
+import common.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Provides a method to run a MarkLogic Data Hub flow
+ */
 public class MarkLogicDataHub {
     private final Config config;
     private static Logger LOGGER = LoggerFactory.getLogger("Log");
