@@ -15,7 +15,6 @@ import java.io.InputStream;
  */
 public class S3StreamWriter implements StreamWriter {
     private AmazonS3Util s3Util;
-    private common.Config config = common.Config.getConfig();
     private static final Logger LOGGER = LoggerFactory.getLogger("Log");
 
     public S3StreamWriter() throws Exception {

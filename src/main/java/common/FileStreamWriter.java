@@ -14,8 +14,7 @@ import java.io.InputStream;
  * amount of documents from MarkLogic to a File System.
  */
 public class FileStreamWriter implements StreamWriter {
-    private String path;
-
+    
     @Override
     /**
      * Write the contents read to an InputStream to a File
@@ -25,7 +24,6 @@ public class FileStreamWriter implements StreamWriter {
     public void write(String path, InputStream inputStream) throws Exception {
         FileOutputStream fileOutputStream = null;
         try {
-            this.path = path;
             File outFile = new File(path);
             outFile.getParentFile().mkdirs();
             fileOutputStream = new FileOutputStream(outFile);

@@ -17,7 +17,7 @@ To run the examples:
 6. Open and read the [src/main/resources/AccessKeys.README](src/main/resources/AccessKeys.README)
 7. Create AccessKeys.secret file in the same directory using your AWS and MarkLogic credentials and environment settings
 8. Run the following main program for loading data from S3 to MarkLogic
-      - src/main/java/main/LoadS3ToMarkLogic.java
+    - src/main/java/main/LoadS3ToMarkLogic.java
 
 # Run a Data Hub Flow
 
@@ -25,3 +25,8 @@ To run the examples:
 
 Run the following main programe for starting a data hub flowl
   - src/main/java/main/RunDataHubFlow.java
+
+# Run an Extract from MarkLogic to S3
+
+Run the following main program for extracting to S3
+  - src/main/java/main/ExtractDataFromMarkLogic.java

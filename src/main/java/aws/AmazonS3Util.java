@@ -76,6 +76,6 @@ public class AmazonS3Util {
 	 */
 	public void writeInputStreamToDoc(String s3FileKey, InputStream inputStream) throws Exception {
 		ObjectMetadata metadata = new ObjectMetadata();
-		PutObjectResult result = s3.putObject(bucket, s3FileKey, inputStream, metadata);
+		s3.putObject(bucket, s3FileKey, inputStream, metadata);
 	}
 }

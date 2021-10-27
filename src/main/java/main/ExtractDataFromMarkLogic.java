@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
  * or an AWS S3 Bucket.
  */
 public class ExtractDataFromMarkLogic {
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger("Log");
 
     /**
