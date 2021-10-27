@@ -4,7 +4,8 @@
 This project is a fully functional Java application that performs the following:
 1. Extracts data from AWS S3 using AWS libraries
 2. Streams S3 data into MarkLogic Data Hub using MarkLogic Java Client API and Data Movement SDK (DMSDK)
-3. Also allows launching a data hub flow after data is loaded
+3. Shows how to launch a data hub flow
+4. Extracts data from MarkLogic Data Hub and streams it back to S3
 
 ** NOTE: This project uses Java JDK 1.8 and Gradle 6.x **
 
