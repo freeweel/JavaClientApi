@@ -13,7 +13,7 @@ To run the examples:
 2. Ensure you have gradle and JDK set up
 4. Build code using gradle
 5. You will need a working MarkLogic instance as well as files in an S3 bucket on AWS
-6. Open and read the src/main/resources/AccessKeys.README
+6. Open and read the [src/main/resources/AccessKeys.README](src/main/resources/AccessKeys.README)
 7. Create AccessKeys.secret file in the same directory using your AWS and MarkLogic credentials and environment settings
 8. Run the following main program for loading data from S3 to MarkLogic
       - src/main/java/main/LoadS3ToMarkLogic.java
