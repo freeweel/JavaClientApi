@@ -2,7 +2,7 @@ package main;
 
 import aws.S3StreamWriter;
 import common.FileStreamWriter;
-import marklogic.MarkLogicDataMovement;
+import marklogic.MarkLogicDataMovementUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class ExtractDataFromMarkLogic {
      */
     public static void main(String[] args) throws Exception {
         String[] collection = {"Person-Ingest"};
-        MarkLogicDataMovement dmsdk = new MarkLogicDataMovement();
+        MarkLogicDataMovementUtil dmsdk = new MarkLogicDataMovementUtil();
         // Write to S3
         dmsdk.extractFromMarkLogic(new S3StreamWriter(), collection);
         // Write to File System

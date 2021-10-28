@@ -2,7 +2,7 @@ package main;
 
 import aws.AmazonS3Util;
 import common.Config;
-import marklogic.MarkLogicDataMovement;
+import marklogic.MarkLogicDataMovementUtil;
 import marklogic.MarkLogicStreamWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public final class LoadS3ToMarkLogic {
             String bucketName = config.AWS_BUCKET;
 
             // Create MarkLogic data movement instance and start the load job
-            MarkLogicDataMovement dmsdk = new MarkLogicDataMovement();
+            MarkLogicDataMovementUtil dmsdk = new MarkLogicDataMovementUtil();
             MarkLogicStreamWriter markLogicStreamWriter = new MarkLogicStreamWriter(dmsdk);
             dmsdk.startWriteJob("S3-Write");
 

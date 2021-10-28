@@ -18,11 +18,11 @@ import java.util.Properties;
 /**
  * Provides a method to run a MarkLogic Data Hub flow
  */
-public class MarkLogicDataHub {
+public class MarkLogicDataHubUtil {
     private final Config config;
     private static Logger LOGGER = LoggerFactory.getLogger("Log");
 
-    public MarkLogicDataHub() throws Exception {
+    public MarkLogicDataHubUtil() throws Exception {
         this.config = Config.getConfig();
     }
 

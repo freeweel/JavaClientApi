@@ -20,7 +20,7 @@ import java.time.Instant;
  * This class provides a layer around the Data Movement SDK's
  * DataMovementManager and WriteBatcher
  */
-public class MarkLogicDataMovement {
+public class MarkLogicDataMovementUtil {
     private DataMovementManager dmManager;
     private DatabaseClient dbClient;
     private WriteBatcher writeBatcher;
@@ -30,7 +30,7 @@ public class MarkLogicDataMovement {
      * Constructor that sets the configuration and
      * creates a new data movement manager
      */
-    public MarkLogicDataMovement() throws Exception {
+    public MarkLogicDataMovementUtil() throws Exception {
         Config config = Config.getConfig();
         // Set up a new Client
         DigestAuthContext authContext = new DatabaseClientFactory.DigestAuthContext(config.ML_USER, config.ML_PASSWORD);

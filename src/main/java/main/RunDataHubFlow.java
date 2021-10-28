@@ -1,6 +1,6 @@
 package main;
 
-import marklogic.MarkLogicDataHub;
+import marklogic.MarkLogicDataHubUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ public class RunDataHubFlow {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        MarkLogicDataHub dataHub = new MarkLogicDataHub();
+        MarkLogicDataHubUtil dataHub = new MarkLogicDataHubUtil();
         dataHub.runFlow("Person-Flow", "2");
     }
 }

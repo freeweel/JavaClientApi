@@ -5,9 +5,9 @@ import common.StreamWriter;
 import java.io.InputStream;
 
 public class MarkLogicStreamWriter implements StreamWriter {
-    private final MarkLogicDataMovement dmsdk;
+    private final MarkLogicDataMovementUtil dmsdk;
 
-    public MarkLogicStreamWriter(MarkLogicDataMovement dmsdk) {
+    public MarkLogicStreamWriter(MarkLogicDataMovementUtil dmsdk) {
         this.dmsdk = dmsdk;
     }
 
