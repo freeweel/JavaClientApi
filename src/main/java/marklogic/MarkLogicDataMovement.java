@@ -40,7 +40,7 @@ public class MarkLogicDataMovement {
     /**
      * Set up Query batcher that gets content out of MarkLogic and writes to an external system
      * @param outputStreamWriter An output stream writer for Files, S3, or another MarkLogic DB
-     * @param collection One or more MarkLogic collections names that are used to find extract data
+     * @param collection One or more MarkLogic collection names that are used to find and extract data
      * @apiNote This is pure stream writing, so the full object is never in memory.
      * @throws Exception
      */
