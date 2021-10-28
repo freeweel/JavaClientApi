@@ -35,7 +35,7 @@ public final class LoadS3ToMarkLogic {
 
             // Instantiate an S3 Utility and find and load the docs from S3
             AmazonS3Util s3Util = new AmazonS3Util();
-            s3Util.loadDocs(markLogicStreamWriter);
+            total += s3Util.loadDocs(markLogicStreamWriter);
 
             // Flush jobs and close write batch
             dmsdk.closeWriteJob();
