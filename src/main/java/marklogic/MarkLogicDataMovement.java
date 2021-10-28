@@ -23,6 +23,7 @@ import java.time.Instant;
 public class MarkLogicDataMovement {
     private DataMovementManager dmManager;
     private DatabaseClient dbClient;
+    private WriteBatcher writeBatcher;
     private static Logger LOGGER = LoggerFactory.getLogger("Log");
 
     /**
@@ -89,19 +90,19 @@ public class MarkLogicDataMovement {
      * @return the WriteBatcher object
      */
     public WriteBatcher startWriteJob(String jobName) {
-        final WriteBatcher writer = dmManager.newWriteBatcher();
+        writeBatcher = dmManager.newWriteBatcher();
 
         // Set up the job properties
-        writer.withJobName(jobName);
-        writer.withBatchSize(50);
-        writer.onBatchSuccess(batch -> {
+        writeBatcher.withJobName(jobName);
+        writeBatcher.withBatchSize(50);
+        writeBatcher.onBatchSuccess(batch -> {
             LOGGER.info("Batch run successful");
         });
-        writer.onBatchFailure((batch, throwable) -> throwable.printStackTrace());
+        writeBatcher.onBatchFailure((batch, throwable) -> throwable.printStackTrace());
 
         // Start the job (also assigns a ticket)
-        dmManager.startJob(writer);
-        return writer;
+        dmManager.startJob(writeBatcher);
+        return writeBatcher;
     }
 
     /**
@@ -109,31 +110,28 @@ public class MarkLogicDataMovement {
      * This include adding the metadata used by data hub, and it
      * adds the new document to an "Ingestion" collection.
      *
-     * @param writer     An initialized WriteBatcher
      * @param uri        The document's URI in MarkLogic
      * @param datastream An input stream of document content (bytes, file, etc)
      */
-    public void addDocument(WriteBatcher writer, String uri, InputStream datastream) {
+    public void addDocument(String uri, InputStream datastream) {
         // Set expected metadata for Data Hub document
         DocumentMetadataHandle dmdh = new DocumentMetadataHandle();
         dmdh.withMetadataValue("datahubCreatedBy", "S3-Ingest");
         dmdh.withMetadataValue("datahubCreatedByStep", "");
         dmdh.withMetadataValue("datahubCreatedInFlow", "");
         dmdh.withMetadataValue("datahubCreatedOn", Instant.now().toString());
-        dmdh.withMetadataValue("datahubCreatedByJob", writer.getJobId());
+        dmdh.withMetadataValue("datahubCreatedByJob", writeBatcher.getJobId());
         dmdh.withCollections("Ingestion");
 
-        writer.addAs(uri, dmdh, datastream);
+        writeBatcher.addAs(uri, dmdh, datastream);
     }
 
     /**
      * Complete the job
      * Flushes any unwritten saves from the cache and closes the job
-     *
-     * @param writer An active WriteBatcher
      */
-    public void closeWriteJob(WriteBatcher writer) {
-        writer.flushAndWait();
-        dmManager.stopJob(writer.getJobTicket());
+    public void closeWriteJob() {
+        writeBatcher.flushAndWait();
+        dmManager.stopJob(writeBatcher.getJobTicket());
     }
 }

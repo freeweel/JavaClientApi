@@ -6,7 +6,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import common.Config;
+import common.StreamWriter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,7 +24,8 @@ import java.util.List;
  */
 public class AmazonS3Util {
 	private AmazonS3 s3;
-	private String bucket;
+	private String bucket, prefix;
+	private static Logger LOGGER = LoggerFactory.getLogger("Log");
 
 	/**
 	 * Constructor (initializes session with credentials)
@@ -33,6 +38,7 @@ public class AmazonS3Util {
 				.withCredentials(new AWSStaticCredentialsProvider(awsCreds))
 				.withRegion(config.AWS_REGION).build();
 		this.bucket = config.AWS_BUCKET;
+		this.prefix = config.AWS_PREFIX;
 	}
 
 	/**
@@ -40,6 +46,36 @@ public class AmazonS3Util {
 	 */
 	public List<Bucket> getBuckets() throws Exception {
 		return s3.listBuckets();
+	}
+
+	/**
+	 * Get list of documents from configured S3 bucket/prefix
+	 * @param writer An object that conforms to the StreamWriter interface to write data to (File, MarkLogic, etc.)
+	 * @return The number of successful writes done
+	 */
+	public int loadDocs(StreamWriter writer) throws Exception {
+		ListObjectsV2Result s3Results = getDocList(bucket, prefix);
+		int total = 0;
+		for (S3ObjectSummary summary : s3Results.getObjectSummaries()) {
+			String s3FileKey = summary.getKey();
+			long size = summary.getSize();
+			LOGGER.info(s3FileKey + " " + size);
+
+			// If document has content then upload to MarkLogic with URI: /Ingest/[S3 object key]
+			if (size > 0) {
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				try {
+					readDocToStream(output, s3FileKey);
+					String uri = String.format("/Ingest/%s", s3FileKey);
+					writer.write(uri, output.toInputStream());
+					total++;
+				}
+				finally {
+					output.close();
+				}
+			}
+		}
+		return total;
 	}
 
 	/**

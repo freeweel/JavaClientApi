@@ -1,12 +1,9 @@
 package main;
 
 import aws.AmazonS3Util;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.marklogic.client.datamovement.WriteBatcher;
 import common.Config;
 import marklogic.MarkLogicDataMovement;
-import org.apache.commons.io.output.ByteArrayOutputStream;
+import marklogic.MarkLogicStreamWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,32 +30,15 @@ public final class LoadS3ToMarkLogic {
 
             // Create MarkLogic data movement instance and start the load job
             MarkLogicDataMovement dmsdk = new MarkLogicDataMovement();
-            WriteBatcher writeBatcher = dmsdk.startWriteJob("S3-Write");
+            MarkLogicStreamWriter markLogicStreamWriter = new MarkLogicStreamWriter(dmsdk);
+            dmsdk.startWriteJob("S3-Write");
 
-            // Get list of documents from named S3 bucket within the specified directory
+            // Instantiate an S3 Utility and find and load the docs from S3
             AmazonS3Util s3Util = new AmazonS3Util();
-            ListObjectsV2Result s3Results = s3Util.getDocList(bucketName, config.AWS_PREFIX);
-            for (S3ObjectSummary summary : s3Results.getObjectSummaries()) {
-                String s3FileKey = summary.getKey();
-                long size = summary.getSize();
-                LOGGER.info(s3FileKey + " " + size);
-
-                // If document has content then upload to MarkLogic with URI: /Ingest/[S3 object key]
-                if (size > 0) {
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    try {
-                        s3Util.readDocToStream(output, s3FileKey);
-                        String uri = String.format("/Ingest/%s", s3FileKey);
-                        dmsdk.addDocument(writeBatcher, uri, output.toInputStream());
-                        total++;
-                    } finally {
-                        output.close();
-                    }
-                }
-            }
+            s3Util.loadDocs(markLogicStreamWriter);
 
             // Flush jobs and close write batch
-            dmsdk.closeWriteJob(writeBatcher);
+            dmsdk.closeWriteJob();
         } catch (Exception e) {
             LOGGER.error("Error occurred while processing upload " + e.getMessage());
         } finally {
